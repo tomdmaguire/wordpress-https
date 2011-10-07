@@ -94,7 +94,9 @@ if ( !class_exists('WordPressHTTPS') ) {
 		function __construct() {
 			// Assign plugin_url
 			if ( version_compare( get_bloginfo('version'), '2.8', '>=' ) ) {
-				$this->plugin_url = plugins_url('', __FILE__);
+				$folder =  basename(dirname(__FILE__));
+				$abspath =  trailingslashit(str_replace("\\", "/", WP_PLUGIN_DIR.'/'. $folder));
+				$this->plugin_url =  trailingslashit(plugins_url('', $abspath .'/'.pathinfo(__FILE__, PATHINFO_BASENAME)));
 			} else {
 				$this->plugin_url = WP_PLUGIN_URL . '/' . plugin_basename(dirname(__FILE__));
 			}
