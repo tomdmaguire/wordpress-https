@@ -487,7 +487,9 @@ if ( !class_exists('WordPressHTTPS') ) {
 		 */
 		function is_ssl() {
 			// Some extra checks for proxies and Shared SSL
-			if ( isset($_SERVER['HTTP_X_URL_SCHEME']) && isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && !is_ssl() && strpos($this->https_url, $_SERVER['HTTP_X_URL_SCHEME'] . '://' . $_SERVER['HTTP_X_FORWARDED_SERVER']) !== false ) {
+			if($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'){
+				return true; 
+			} else if( isset($_SERVER['HTTP_X_URL_SCHEME']) && isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && !is_ssl() && strpos($this->https_url, $_SERVER['HTTP_X_URL_SCHEME'] . '://' . $_SERVER['HTTP_X_FORWARDED_SERVER']) !== false ) {
 				return true;
 			} else if ( $this->shared_ssl && !is_ssl() && strpos($this->https_url, $_SERVER['HTTP_HOST']) !== false ) {
 				return true;
