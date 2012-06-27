@@ -374,11 +374,11 @@ if ( !class_exists('WordPressHTTPS') ) {
 								$buffer = str_replace($html, str_replace($url, $this->replace_http_url($url), $html), $buffer);
 							}
 						} else {
-							if ( strpos($url, $this->http_url) !== false && get_option('wordpress-https_internalurls') == 1 ) {
+							if ( strpos($url, $this->http_url) !== false && get_option('wordpress-https_internalurls', 1) == 1 ) {
 								$buffer = str_replace($html, str_replace($url, $this->replace_http_url($url), $html), $buffer);
 							} else if ( strpos($url, $this->replace_http($this->http_url)) !== false && $this->shared_ssl ) {
 								$buffer = str_replace($html, str_replace($url, $this->replace_http_url($url), $html), $buffer);
-							} else if ( $this->shared_ssl && get_option('wordpress-https_internalurls') == 1 && strpos($html, $this->http_url) !== false ) {
+							} else if ( $this->shared_ssl && get_option('wordpress-https_internalurls', 1) == 1 && strpos($html, $this->http_url) !== false ) {
 								$buffer = str_replace($html, str_replace($url, $this->replace_http_url($url), $html), $buffer);
 							} else if ( strpos($url, $this->https_url) === false && strpos($url, 'https://') === false && get_option('wordpress-https_externalurls') == 1 ) {
 								if ( get_option('wordpress-https_bypass') == 1 ) {
@@ -462,7 +462,7 @@ if ( !class_exists('WordPressHTTPS') ) {
 			}
 
 			// Fix any anchor or form tags that contain the HTTPS version of the regular domain when using Shared SSL
-			if ( $this->shared_ssl && get_option('wordpress-https_internalurls') == 1 ) {
+			if ( $this->shared_ssl && get_option('wordpress-https_internalurls', 1) == 1 ) {
 				$regex_url = preg_quote($this->replace_http($this->http_url));
 				$regex_url = str_replace('/', '\/', $regex_url);
 				preg_match_all('/\<(a|form)[^>]+(' . $regex_url . ')[^>]+>/im', $buffer, $matches);
@@ -488,7 +488,7 @@ if ( !class_exists('WordPressHTTPS') ) {
 		function is_ssl() {
 			// Some extra checks for proxies and Shared SSL
 			if($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'){
-				return true; 
+				return true;
 			} else if( isset($_SERVER['HTTP_X_URL_SCHEME']) && isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && !is_ssl() && strpos($this->https_url, $_SERVER['HTTP_X_URL_SCHEME'] . '://' . $_SERVER['HTTP_X_FORWARDED_SERVER']) !== false ) {
 				return true;
 			} else if ( $this->shared_ssl && !is_ssl() && strpos($this->https_url, $_SERVER['HTTP_HOST']) !== false ) {
